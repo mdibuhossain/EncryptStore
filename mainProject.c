@@ -111,24 +111,13 @@ void signinScreen()
     fclose(userRecord);
 }
 
+// Code Run from here
 int main()
 {
+    // CMD window resize
     system("MODE 100, 35");
 
-    // // declare file
-    // FILE *outfile;
-
-    // // open file for writing and append
-    // outfile = fopen("person.dat", "a");
-
-    // // FILE error handling (if file doesn't exit)
-    // if (outfile == NULL)
-    // {
-    //     fprintf(stderr, "\nError opend file\n");
-    //     exit(1);
-    // }
-
-    // Main menu
+    // Display main menu
     mainScreen();
 
     while (1)
@@ -156,50 +145,6 @@ int main()
             printf("Invalid command\n");
         }
     }
-
-    // struct person data[3];
-    // for (int i = 0; i < 3; ++i)
-    // {
-    //     char firstName[20], lastName[20];
-    //     data[i].id = i + 1;
-    //     gets(data[i].fname);
-    //     gets(data[i].lname);
-    //     fwrite(&data[i], sizeof(struct person), 1, outfile);
-    // }
-
-    // if (fwrite != 0)
-    //     printf("contents to file written successfully !\n");
-    // else
-    //     printf("error writing file !\n");
-
-    // // close file
-    // fclose(outfile);
-
-    // FILE *infile;
-    // infile = fopen("person.txt", "r");
-    // if (infile == NULL)
-    // {
-    //     fprintf(stderr, "\nError opening file\n");
-    //     exit(1);
-    // }
-    // struct person input;
-    // // read file contents till end of file
-    // int idd;
-    // char firstName[25];
-    // char SecondName[25];
-    // gets(firstName);
-    // gets(SecondName);
-    // scanf("%d", &idd);
-    // while (fread(&input, sizeof(struct person), 1, infile))
-    // {
-    //     if (idd == input.id && !strcmp(firstName, input.fname) && !strcmp(SecondName, input.lname))
-    //     {
-    //         printf("id = %d name = %s %s\n", input.id, input.fname, input.lname);
-    //     }
-    // }
-
-    // // close file
-    // fclose(infile);
 
     return 0;
 }
