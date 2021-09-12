@@ -28,7 +28,7 @@ void mainScreen()
     gotoxy(39, 6);
     printf("Press 2 for SING IN\n");
     gotoxy(39, 8);
-    printf("Press 3 for Main Menu\n");
+    printf("Press 3 for Check User Existence\n");
     gotoxy(39, 10);
     printf("Press 4 for EXIT\n");
     gotoxy(25, 12);
@@ -42,7 +42,7 @@ void loadingScreen()
     for (int i = 1; i <= 85; i++)
     {
         printf("-");
-        Sleep(5);
+        Sleep(5); // milliseconds
     }
 }
 
@@ -116,11 +116,54 @@ void signinScreen()
     fclose(userRecord);
 }
 
+// Check User Existence
+void userExistence()
+{
+    system("cls");
+    loadingScreen();
+    system("cls");
+    struct person userData, storedData;
+    FILE *userRecord;
+    userRecord = fopen("person.dat", "rb");
+    gotoxy(25, 2);
+    printf("--------------Check User Existence---------------\n");
+    gotoxy(30, 4);
+    printf("username      :");
+    gotoxy(46, 4);
+    gets(userData.username);
+    int flag = 1;
+    while (!feof(userRecord))
+    {
+        fread(&storedData, sizeof(struct person), 1, userRecord);
+        if (!strcmp(storedData.username, userData.username))
+        {
+            flag = 0;
+            system("cls");
+            gotoxy(42, 16);
+            printf("User Exist\n");
+            gotoxy(35, 25);
+            system("pause");
+            mainScreen();
+            break;
+        }
+    }
+    if (flag)
+    {
+        system("cls");
+        gotoxy(39, 16);
+        printf("User Doesn't Exist\n");
+        gotoxy(35, 25);
+        system("pause");
+        mainScreen();
+    }
+}
+
 // Code Run from here
 void main()
 {
     // CMD window resize
-    system("MODE 100, 35");
+    system("MODE 100, 35"); // MODE Columns, Rows (ASCII)
+    system("color F0");
 
     // Display main menu
     mainScreen();
@@ -143,10 +186,11 @@ void main()
             signinScreen();
             break;
         case '3':
-            printf("Pressed THREE (3)\n");
+            userExistence();
             break;
         case '4':
             system("cls");
+            system("color FC");
             exit(0);
             break;
         default:
