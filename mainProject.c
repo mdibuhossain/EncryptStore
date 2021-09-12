@@ -54,7 +54,7 @@ void loginScreen()
     system("cls");
     struct person userData, storedData;
     FILE *userRecord;
-    userRecord = fopen("person.dat", "rb");
+    userRecord = fopen("person.bin", "rb");
     gotoxy(25, 2);
     printf("-------------------- LOG IN ---------------------\n");
     gotoxy(30, 4);
@@ -126,7 +126,7 @@ void signinScreen()
     system("cls");
     struct person userData;
     FILE *userRecord;
-    userRecord = fopen("person.dat", "ab");
+    userRecord = fopen("person.bin", "ab");
     gotoxy(25, 2);
     printf("--------------------SIGN IN---------------------\n");
 
@@ -164,7 +164,7 @@ void userExistence()
     system("cls");
     struct person userData, storedData;
     FILE *userRecord;
-    userRecord = fopen("person.dat", "rb");
+    userRecord = fopen("person.bin", "rb");
     gotoxy(25, 2);
     printf("--------------Check User Existence---------------\n");
     gotoxy(30, 4);
