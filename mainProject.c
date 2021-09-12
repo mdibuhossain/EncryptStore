@@ -1,5 +1,3 @@
-// C program for writing
-// struct to file
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,17 +71,24 @@ void loginScreen()
         fread(&storedData, sizeof(struct person), 1, userRecord);
         if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
         {
-            gotoxy(8, 15);
-            printf("Valid account");
             flag = 0;
+            system("cls");
+            gotoxy(40, 16);
+            printf("Valid account\n");
+            gotoxy(35, 25);
+            system("pause");
+            mainScreen();
             break;
         }
     }
     if (flag)
     {
         system("cls");
-        gotoxy(8, 15);
-        printf("Invalid account");
+        gotoxy(40, 16);
+        printf("Invalid account\n");
+        gotoxy(35, 25);
+        system("pause");
+        mainScreen();
     }
     fclose(userRecord);
 }
@@ -112,7 +117,7 @@ void signinScreen()
 }
 
 // Code Run from here
-int main()
+void main()
 {
     // CMD window resize
     system("MODE 100, 35");
@@ -120,13 +125,15 @@ int main()
     // Display main menu
     mainScreen();
 
+    char inp;
+
     while (1)
     {
         printf("> ");
-        char inp;
 
         scanf("%c", &inp);
         getchar();
+
         switch (inp)
         {
         case '1':
@@ -139,12 +146,11 @@ int main()
             printf("Pressed THREE (3)\n");
             break;
         case '4':
-            printf("Pressed FOUR (4)\n");
+            system("cls");
+            exit(0);
             break;
         default:
             printf("Invalid command\n");
         }
     }
-
-    return 0;
 }
