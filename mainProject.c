@@ -130,7 +130,7 @@ void loginScreen()
                 flag = 0;
                 system("cls");
                 gotoxy(40, 16);
-                printf("Valid account\n");
+                printf("Welcome, %s\n", userData.username);
                 gotoxy(35, 25);
                 system("pause");
                 mainScreen();
@@ -140,8 +140,8 @@ void loginScreen()
         if (flag)
         {
             system("cls");
-            gotoxy(40, 16);
-            printf("Invalid account\n");
+            gotoxy(35, 16);
+            printf("------Invalid account------\n");
             gotoxy(35, 25);
             system("pause");
             mainScreen();
@@ -195,6 +195,58 @@ void signinScreen()
     fclose(userRecord);
 }
 
+// User Exist
+void userExist()
+{
+    system("cls");
+
+    gotoxy(33, 10);
+    printf("|=================================|");
+
+    gotoxy(33, 11);
+    printf("|.................................|\n");
+
+    gotoxy(33, 12);
+    printf("|...........User Exist............|\n");
+
+    gotoxy(33, 13);
+    printf("|.................................|\n");
+
+    gotoxy(33, 14);
+    printf("|=================================|");
+
+    gotoxy(33, 18);
+    system("pause");
+
+    mainScreen();
+}
+
+// User Doesn't Exist
+void userDoesntExist()
+{
+    system("cls");
+
+    gotoxy(33, 10);
+    printf("!=================================!");
+
+    gotoxy(33, 11);
+    printf("!.................................!\n");
+
+    gotoxy(33, 12);
+    printf("!.......User Doesn't Exist........!\n");
+
+    gotoxy(33, 13);
+    printf("!.................................!\n");
+
+    gotoxy(33, 14);
+    printf("!=================================!");
+
+    gotoxy(33, 18);
+    system("pause");
+
+    mainScreen();
+}
+
 // Check User Existence
 void userExistence()
 {
@@ -222,22 +274,14 @@ void userExistence()
         if (!strcmp(storedData.username, userData.username))
         {
             flag = 0;
-            system("cls");
-            gotoxy(42, 16);
-            printf("User Exist\n");
-            gotoxy(35, 25);
-            system("pause");
+            userExist();
             mainScreen();
             break;
         }
     }
     if (flag)
     {
-        system("cls");
-        gotoxy(39, 16);
-        printf("User Doesn't Exist\n");
-        gotoxy(35, 25);
-        system("pause");
+        userDoesntExist();
         mainScreen();
     }
 
