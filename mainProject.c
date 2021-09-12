@@ -68,8 +68,6 @@ void loadErrorMessage()
 
     gotoxy(33, 23);
     system("pause");
-
-    mainScreen();
 }
 
 // login screen
@@ -81,6 +79,8 @@ void loginScreen()
 
     struct person userData, storedData;
     FILE *userRecord;
+
+    // File open for read
     userRecord = fopen("person.bin", "rb");
 
     gotoxy(25, 2);
@@ -95,6 +95,7 @@ void loginScreen()
     gotoxy(30, 6);
     printf("password      :");
 
+    // Password input
     gotoxy(46, 6);
     int ch, i = 0;
     while (1)
@@ -133,8 +134,7 @@ void loginScreen()
                 printf("Welcome, %s\n", userData.username);
                 gotoxy(35, 25);
                 system("pause");
-                mainScreen();
-                break;
+                return;
             }
         }
         if (flag)
@@ -144,7 +144,6 @@ void loginScreen()
             printf("------Invalid account------\n");
             gotoxy(35, 25);
             system("pause");
-            mainScreen();
         }
     }
 
@@ -159,9 +158,8 @@ void signinScreen()
     loadingScreen();
     system("cls");
 
-    struct person userData;
+    struct person userData, storedData;
     FILE *userRecord;
-    userRecord = fopen("person.bin", "ab");
 
     gotoxy(25, 2);
     printf("--------------------SIGN IN---------------------\n");
@@ -188,11 +186,36 @@ void signinScreen()
     }
     else
     {
-        fwrite(&userData, sizeof(struct person), 1, userRecord);
-    }
+        // File open for read
+        userRecord = fopen("person.bin", "rb");
 
-    // File close
-    fclose(userRecord);
+        // checking user already existance
+        while (!feof(userRecord))
+        {
+            fread(&storedData, sizeof(struct person), 1, userRecord);
+            if (!strcmp(userData.username, storedData.username))
+            {
+                fclose(userRecord);
+                userExist();
+                return;
+            }
+        }
+        // File close
+        fclose(userRecord);
+
+        // File open for append
+        userRecord = fopen("person.bin", "ab");
+        fwrite(&userData, sizeof(struct person), 1, userRecord);
+
+        // File close
+        fclose(userRecord);
+
+        system("cls");
+        gotoxy(33, 13);
+        printf("Username and Password are Stored\n");
+        gotoxy(33, 18);
+        system("pause");
+    }
 }
 
 // User Exist
@@ -217,8 +240,6 @@ void userExist()
 
     gotoxy(33, 18);
     system("pause");
-
-    mainScreen();
 }
 
 // User Doesn't Exist
@@ -243,8 +264,6 @@ void userDoesntExist()
 
     gotoxy(33, 18);
     system("pause");
-
-    mainScreen();
 }
 
 // Check User Existence
@@ -275,14 +294,12 @@ void userExistence()
         {
             flag = 0;
             userExist();
-            mainScreen();
             break;
         }
     }
     if (flag)
     {
         userDoesntExist();
-        mainScreen();
     }
 
     // File close
@@ -297,12 +314,14 @@ void main()
     system("color F0");
 
     // Display main menu
-    mainScreen();
+    // mainScreen();
 
     char inp;
 
     while (1)
     {
+        mainScreen();
+
         printf("> ");
 
         scanf("%c", &inp);
