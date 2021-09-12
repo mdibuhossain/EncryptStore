@@ -311,6 +311,7 @@ void main()
 {
     // CMD window resize
     system("MODE 100, 35"); // MODE Columns, Rows (ASCII)
+    system("title Authentication Form");
     system("color F0");
 
     // Display main menu
