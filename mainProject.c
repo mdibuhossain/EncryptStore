@@ -42,7 +42,7 @@ void loadingScreen()
     for (int i = 1; i <= 85; i++)
     {
         printf("-");
-        Sleep(5); // milliseconds
+        Sleep(4); // milliseconds
     }
 }
 
@@ -93,6 +93,31 @@ void loginScreen()
     fclose(userRecord);
 }
 
+void loadErrorMessage()
+{
+    system("cls");
+
+    gotoxy(33, 10);
+    printf("!=================================!");
+
+    gotoxy(33, 12);
+    printf("!......Username and Password......!\n");
+
+    gotoxy(33, 14);
+    printf("!............Should be............!\n");
+
+    gotoxy(33, 16);
+    printf("!..(max:12 char and min: 4 char)..!\n");
+
+    gotoxy(33, 18);
+    printf("!=================================!");
+
+    gotoxy(33, 23);
+    system("pause");
+
+    mainScreen();
+}
+
 // sign in screen
 void signinScreen()
 {
@@ -104,15 +129,30 @@ void signinScreen()
     userRecord = fopen("person.dat", "ab");
     gotoxy(25, 2);
     printf("--------------------SIGN IN---------------------\n");
+
     gotoxy(30, 4);
-    printf("username      :");
-    gotoxy(46, 4);
-    gets(userData.username);
+    printf("(max:12 char and min: 4 char)");
+
     gotoxy(30, 6);
-    printf("password      :");
+    printf("username      :");
+
     gotoxy(46, 6);
+    gets(userData.username);
+
+    gotoxy(30, 8);
+    printf("password      :");
+
+    gotoxy(46, 8);
     gets(userData.passcode);
+
+    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
+        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
+    {
+        loadErrorMessage();
+    }
+
     fwrite(&userData, sizeof(struct person), 1, userRecord);
+
     fclose(userRecord);
 }
 
