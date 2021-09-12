@@ -147,7 +147,8 @@ void loginScreen()
             mainScreen();
         }
     }
-    
+
+    // File close
     fclose(userRecord);
 }
 
@@ -190,6 +191,7 @@ void signinScreen()
         fwrite(&userData, sizeof(struct person), 1, userRecord);
     }
 
+    // File close
     fclose(userRecord);
 }
 
@@ -238,6 +240,9 @@ void userExistence()
         system("pause");
         mainScreen();
     }
+
+    // File close
+    fclose(userRecord);
 }
 
 // Code Run from here
