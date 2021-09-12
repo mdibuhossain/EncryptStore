@@ -46,53 +46,7 @@ void loadingScreen()
     }
 }
 
-// login screen
-void loginScreen()
-{
-    system("cls");
-    loadingScreen();
-    system("cls");
-    struct person userData, storedData;
-    FILE *userRecord;
-    userRecord = fopen("person.bin", "rb");
-    gotoxy(25, 2);
-    printf("-------------------- LOG IN ---------------------\n");
-    gotoxy(30, 4);
-    printf("username      :");
-    gotoxy(46, 4);
-    gets(userData.username);
-    gotoxy(30, 6);
-    printf("password      :");
-    gotoxy(46, 6);
-    gets(userData.passcode);
-    int flag = 1;
-    while (!feof(userRecord))
-    {
-        fread(&storedData, sizeof(struct person), 1, userRecord);
-        if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
-        {
-            flag = 0;
-            system("cls");
-            gotoxy(40, 16);
-            printf("Valid account\n");
-            gotoxy(35, 25);
-            system("pause");
-            mainScreen();
-            break;
-        }
-    }
-    if (flag)
-    {
-        system("cls");
-        gotoxy(40, 16);
-        printf("Invalid account\n");
-        gotoxy(35, 25);
-        system("pause");
-        mainScreen();
-    }
-    fclose(userRecord);
-}
-
+// Error message for username and password length
 void loadErrorMessage()
 {
     system("cls");
@@ -118,15 +72,96 @@ void loadErrorMessage()
     mainScreen();
 }
 
+// login screen
+void loginScreen()
+{
+    system("cls");
+    loadingScreen();
+    system("cls");
+
+    struct person userData, storedData;
+    FILE *userRecord;
+    userRecord = fopen("person.bin", "rb");
+
+    gotoxy(25, 2);
+    printf("-------------------- LOG IN ---------------------\n");
+
+    gotoxy(30, 4);
+    printf("username      :");
+
+    gotoxy(46, 4);
+    gets(userData.username);
+
+    gotoxy(30, 6);
+    printf("password      :");
+
+    gotoxy(46, 6);
+    int ch, i = 0;
+    while (1)
+    {
+        ch = getch();
+        if (ch == 13)
+            break;
+        else if (ch == 8)
+        {
+            i--;
+            printf("*");
+            continue;
+        }
+        else
+            printf("*");
+        userData.passcode[i++] = (char)ch;
+    }
+    userData.passcode[i] = '\0';
+
+    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
+        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
+    {
+        loadErrorMessage();
+    }
+    else
+    {
+        int flag = 1;
+        while (!feof(userRecord))
+        {
+            fread(&storedData, sizeof(struct person), 1, userRecord);
+            if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
+            {
+                flag = 0;
+                system("cls");
+                gotoxy(40, 16);
+                printf("Valid account\n");
+                gotoxy(35, 25);
+                system("pause");
+                mainScreen();
+                break;
+            }
+        }
+        if (flag)
+        {
+            system("cls");
+            gotoxy(40, 16);
+            printf("Invalid account\n");
+            gotoxy(35, 25);
+            system("pause");
+            mainScreen();
+        }
+    }
+    
+    fclose(userRecord);
+}
+
 // sign in screen
 void signinScreen()
 {
     system("cls");
     loadingScreen();
     system("cls");
+
     struct person userData;
     FILE *userRecord;
     userRecord = fopen("person.bin", "ab");
+
     gotoxy(25, 2);
     printf("--------------------SIGN IN---------------------\n");
 
@@ -150,8 +185,10 @@ void signinScreen()
     {
         loadErrorMessage();
     }
-
-    fwrite(&userData, sizeof(struct person), 1, userRecord);
+    else
+    {
+        fwrite(&userData, sizeof(struct person), 1, userRecord);
+    }
 
     fclose(userRecord);
 }
@@ -162,15 +199,20 @@ void userExistence()
     system("cls");
     loadingScreen();
     system("cls");
+
     struct person userData, storedData;
     FILE *userRecord;
     userRecord = fopen("person.bin", "rb");
+
     gotoxy(25, 2);
     printf("--------------Check User Existence---------------\n");
+
     gotoxy(30, 4);
     printf("username      :");
+
     gotoxy(46, 4);
     gets(userData.username);
+
     int flag = 1;
     while (!feof(userRecord))
     {
