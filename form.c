@@ -141,6 +141,7 @@ void isFileExist()
     gotoxy(33, 14);
     printf("!=================================!");
 
+    fclose(userRecord);
     gotoxy(33, 18);
     system("pause");
 }
