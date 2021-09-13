@@ -366,7 +366,7 @@ void main()
     {
         mainScreen();
 
-        printf("> ");
+        printf("~> ");
 
         scanf("%c", &inp);
         getchar();
