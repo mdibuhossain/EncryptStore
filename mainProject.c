@@ -17,6 +17,9 @@ struct person
     char passcode[20];
 };
 
+// Declare File pointer
+FILE *userRecord = NULL;
+
 // Main menu print function
 void mainScreen()
 {
@@ -26,7 +29,7 @@ void mainScreen()
     gotoxy(39, 4);
     printf("Press 1 for LOG IN\n");
     gotoxy(39, 6);
-    printf("Press 2 for SING IN\n");
+    printf("Press 2 for SING UP\n");
     gotoxy(39, 8);
     printf("Press 3 for Check User Existence\n");
     gotoxy(39, 10);
@@ -68,154 +71,6 @@ void loadErrorMessage()
 
     gotoxy(33, 23);
     system("pause");
-}
-
-// login screen
-void loginScreen()
-{
-    system("cls");
-    loadingScreen();
-    system("cls");
-
-    struct person userData, storedData;
-    FILE *userRecord;
-
-    // File open for read
-    userRecord = fopen("person.bin", "rb");
-
-    gotoxy(25, 2);
-    printf("-------------------- LOG IN ---------------------\n");
-
-    gotoxy(30, 4);
-    printf("username      :");
-
-    gotoxy(46, 4);
-    gets(userData.username);
-
-    gotoxy(30, 6);
-    printf("password      :");
-
-    // Password input
-    gotoxy(46, 6);
-    int ch, i = 0;
-    while (1)
-    {
-        ch = getch();
-        if (ch == 13)
-            break;
-        else if (ch == 8)
-        {
-            i--;
-            printf("*");
-            continue;
-        }
-        else
-            printf("*");
-        userData.passcode[i++] = (char)ch;
-    }
-    userData.passcode[i] = '\0';
-
-    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
-        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
-    {
-        loadErrorMessage();
-    }
-    else
-    {
-        int flag = 1;
-        while (!feof(userRecord))
-        {
-            fread(&storedData, sizeof(struct person), 1, userRecord);
-            if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
-            {
-                flag = 0;
-                system("cls");
-                gotoxy(40, 16);
-                printf("Welcome, %s\n", userData.username);
-                gotoxy(35, 25);
-                system("pause");
-                return;
-            }
-        }
-        if (flag)
-        {
-            system("cls");
-            gotoxy(35, 16);
-            printf("------Invalid account------\n");
-            gotoxy(35, 25);
-            system("pause");
-        }
-    }
-
-    // File close
-    fclose(userRecord);
-}
-
-// sign in screen
-void signinScreen()
-{
-    system("cls");
-    loadingScreen();
-    system("cls");
-
-    struct person userData, storedData;
-    FILE *userRecord;
-
-    gotoxy(25, 2);
-    printf("--------------------SIGN IN---------------------\n");
-
-    gotoxy(30, 4);
-    printf("(max:12 char and min: 4 char)");
-
-    gotoxy(30, 6);
-    printf("username      :");
-
-    gotoxy(46, 6);
-    gets(userData.username);
-
-    gotoxy(30, 8);
-    printf("password      :");
-
-    gotoxy(46, 8);
-    gets(userData.passcode);
-
-    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
-        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
-    {
-        loadErrorMessage();
-    }
-    else
-    {
-        // File open for read
-        userRecord = fopen("person.bin", "rb");
-
-        // checking user already existance
-        while (!feof(userRecord))
-        {
-            fread(&storedData, sizeof(struct person), 1, userRecord);
-            if (!strcmp(userData.username, storedData.username))
-            {
-                fclose(userRecord);
-                userExist();
-                return;
-            }
-        }
-        // File close
-        fclose(userRecord);
-
-        // File open for append
-        userRecord = fopen("person.bin", "ab");
-        fwrite(&userData, sizeof(struct person), 1, userRecord);
-
-        // File close
-        fclose(userRecord);
-
-        system("cls");
-        gotoxy(33, 13);
-        printf("Username and Password are Stored\n");
-        gotoxy(33, 18);
-        system("pause");
-    }
 }
 
 // User Exist
@@ -266,6 +121,187 @@ void userDoesntExist()
     system("pause");
 }
 
+// checking file existance
+void isFileExist()
+{
+    system("cls");
+
+    gotoxy(33, 10);
+    printf("!=================================!");
+
+    gotoxy(33, 11);
+    printf("!.................................!\n");
+
+    gotoxy(33, 12);
+    printf("!......User Profile Missing.......!\n");
+
+    gotoxy(33, 13);
+    printf("!.................................!\n");
+
+    gotoxy(33, 14);
+    printf("!=================================!");
+
+    gotoxy(33, 18);
+    system("pause");
+}
+
+// login screen
+void loginScreen()
+{
+    system("cls");
+    loadingScreen();
+    system("cls");
+
+    struct person userData, storedData;
+    // FILE *userRecord;
+
+    // File open for read
+    userRecord = fopen("person.bin", "rb");
+
+    gotoxy(25, 2);
+    printf("-------------------- LOG IN ---------------------\n");
+
+    gotoxy(30, 4);
+    printf("username      :");
+
+    gotoxy(46, 4);
+    gets(userData.username);
+
+    gotoxy(30, 6);
+    printf("password      :");
+
+    // Password input
+    gotoxy(46, 6);
+    int ch, i = 0;
+    while (1)
+    {
+        ch = getch();
+        if (ch == 13)
+            break;
+        else if (ch == 8)
+        {
+            i--;
+            printf("*");
+            continue;
+        }
+        else
+            printf("*");
+        userData.passcode[i++] = (char)ch;
+    }
+    userData.passcode[i] = '\0';
+
+    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
+        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
+    {
+        loadErrorMessage();
+    }
+    else
+    {
+        if (userRecord == NULL)
+        {
+            isFileExist();
+            return;
+        }
+        int flag = 1;
+        while (!feof(userRecord))
+        {
+            fread(&storedData, sizeof(struct person), 1, userRecord);
+            if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
+            {
+                flag = 0;
+                system("cls");
+                gotoxy(40, 16);
+                printf("Welcome, %s\n", userData.username);
+                gotoxy(35, 25);
+                system("pause");
+                return;
+            }
+        }
+        if (flag)
+        {
+            system("cls");
+            gotoxy(35, 16);
+            printf("------Invalid account------\n");
+            gotoxy(35, 25);
+            system("pause");
+        }
+    }
+
+    // File close
+    fclose(userRecord);
+}
+
+// sign in screen
+void signupScreen()
+{
+    system("cls");
+    loadingScreen();
+    system("cls");
+
+    struct person userData, storedData;
+    // FILE *userRecord;
+
+    gotoxy(25, 2);
+    printf("--------------------SIGN IN---------------------\n");
+
+    gotoxy(30, 4);
+    printf("(max:12 char and min: 4 char)");
+
+    gotoxy(30, 6);
+    printf("username      :");
+
+    gotoxy(46, 6);
+    gets(userData.username);
+
+    gotoxy(30, 8);
+    printf("password      :");
+
+    gotoxy(46, 8);
+    gets(userData.passcode);
+
+    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
+        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
+    {
+        loadErrorMessage();
+    }
+    else
+    {
+        // Create file
+        userRecord = fopen("person.bin", "ab");
+        fclose(userRecord);
+
+        // File open for read
+        userRecord = fopen("person.bin", "rb");
+
+        // checking user already existance
+        while (!feof(userRecord))
+        {
+            fread(&storedData, sizeof(struct person), 1, userRecord);
+            if (!strcmp(userData.username, storedData.username))
+            {
+                fclose(userRecord);
+                userExist();
+                return;
+            }
+        }
+        // File close
+        fclose(userRecord);
+
+        // File open for append
+        userRecord = fopen("person.bin", "ab");
+        fwrite(&userData, sizeof(struct person), 1, userRecord);
+
+        // File close
+        fclose(userRecord);
+
+        system("cls");
+        gotoxy(33, 13);
+        printf("Username and Password are Stored\n");
+        gotoxy(33, 18);
+        system("pause");
+    }
+}
+
 // Check User Existence
 void userExistence()
 {
@@ -274,7 +310,14 @@ void userExistence()
     system("cls");
 
     struct person userData, storedData;
-    FILE *userRecord;
+    // FILE *userRecord;
+
+    if (userRecord == NULL)
+    {
+        isFileExist();
+        return;
+    }
+
     userRecord = fopen("person.bin", "rb");
 
     gotoxy(25, 2);
@@ -334,7 +377,7 @@ void main()
             loginScreen();
             break;
         case '2':
-            signinScreen();
+            signupScreen();
             break;
         case '3':
             userExistence();
