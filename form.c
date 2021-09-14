@@ -49,6 +49,13 @@ void loadingScreen()
     }
 }
 
+// ask to return main menu
+void askToReturnMainMenu()
+{
+    system("echo Press any key to return Main menu");
+    getch();
+}
+
 // Error message for username and password length
 void loadErrorMessage()
 {
@@ -70,7 +77,8 @@ void loadErrorMessage()
     printf("!=================================!");
 
     gotoxy(33, 23);
-    system("pause");
+    askToReturnMainMenu();
+    // system("pause");
 }
 
 // User Exist
@@ -94,7 +102,8 @@ void userExist()
     printf("|=================================|");
 
     gotoxy(33, 18);
-    system("pause");
+    askToReturnMainMenu();
+    // system("pause");
 }
 
 // User Doesn't Exist
@@ -118,7 +127,8 @@ void userDoesntExist()
     printf("!=================================!");
 
     gotoxy(33, 18);
-    system("pause");
+    askToReturnMainMenu();
+    // system("pause");
 }
 
 // checking file existance
@@ -143,7 +153,8 @@ void isFileExist()
 
     fclose(userRecord);
     gotoxy(33, 18);
-    system("pause");
+    askToReturnMainMenu();
+    // system("pause");
 }
 
 // login screen
@@ -224,7 +235,8 @@ void loginScreen()
             gotoxy(35, 16);
             printf("------Invalid account------\n");
             gotoxy(35, 25);
-            system("pause");
+            askToReturnMainMenu();
+            // system("pause");
         }
     }
 
@@ -299,7 +311,8 @@ void signupScreen()
         gotoxy(33, 13);
         printf("Username and Password are Stored\n");
         gotoxy(33, 18);
-        system("pause");
+        askToReturnMainMenu();
+        // system("pause");
     }
 }
 
