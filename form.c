@@ -371,13 +371,13 @@ void main()
     system("title Authentication Form");
     system("color F0");
 
-    // Display main menu
     // mainScreen();
 
     char inp;
 
     while (1)
     {
+        // Display main menu
         mainScreen();
 
         printf("~> ");
