@@ -1,0 +1,14 @@
+C/data
+C++/data
+
+C/.vscode
+C++/.vscode
+
+C/EncryptStore.bin
+C++/EncryptStore.bin
+
+C/EncryptStore.exe
+C++/EncryptStore.exe
+
+C/EncryptStore.o
+C++/EncryptStore.o
