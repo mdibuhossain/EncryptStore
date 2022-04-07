@@ -60,10 +60,10 @@ void loadingScreen()
 {
     system("cls");
     gotoxy(8, 15);
-    for (int i = 1; i <= 85; i++)
+    for (int i = 1; i <= 42; i++)
     {
-        printf("-");
-        Sleep(4); // milliseconds
+        printf("--");
+        Sleep(1); // milliseconds
     }
 }
 
