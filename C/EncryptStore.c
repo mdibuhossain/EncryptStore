@@ -243,9 +243,8 @@ void filterByPlatform(char *username)
         return;
     }
     system("cls");
-    while (!feof(userDataFile))
+    while (fread(&tmpFilteredSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
-        fread(&tmpFilteredSocial, sizeof(socialData), 1, userDataFile);
         if (!strcmp(tmpFilteredSocial.platform, tmpPlatform))
         {
             printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpFilteredSocial.platform, tmpFilteredSocial.email, tmpFilteredSocial.password);
@@ -285,9 +284,8 @@ void filterByEmail(char *username)
         return;
     }
     system("cls");
-    while (!feof(userDataFile))
+    while (fread(&tmpFilteredData, sizeof(socialData), 1, userDataFile) == 1)
     {
-        fread(&tmpFilteredData, sizeof(socialData), 1, userDataFile);
         if (feof(userDataFile))
             break;
         if (!strcmp(tmpFilteredData.email, tmpEmail))
@@ -319,9 +317,8 @@ void showAllSocialData(char *username)
         return;
     }
     system("cls");
-    while (!feof(userDataFile))
+    while (fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
-        fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile);
         if (feof(userDataFile))
             break;
         printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpAllSocial.platform, tmpAllSocial.email, tmpAllSocial.password);
@@ -441,9 +438,8 @@ void loginScreen()
             return;
         }
         int flag = 1;
-        while (!feof(userRecord))
+        while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
         {
-            fread(&storedData, sizeof(person), 1, userRecord);
             if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
             {
                 flag = 0;
@@ -514,9 +510,8 @@ void signupScreen()
         userRecord = fopen(personPath, "rb");
 
         // checking user already existance
-        while (!feof(userRecord))
+        while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
         {
-            fread(&storedData, sizeof(person), 1, userRecord);
             if (!strcmp(userData.username, storedData.username))
             {
                 fclose(userRecord);
@@ -569,9 +564,8 @@ void userExistence()
     gets(userData.username);
 
     int flag = 1;
-    while (!feof(userRecord))
+    while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
     {
-        fread(&storedData, sizeof(person), 1, userRecord);
         if (!strcmp(storedData.username, userData.username))
         {
             flag = 0;
