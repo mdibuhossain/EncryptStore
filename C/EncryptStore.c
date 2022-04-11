@@ -621,11 +621,11 @@ int main()
             break;
         case '4':
             system("cls");
-            system("color FC");
             exit(0);
             break;
         default:
-            printf("Invalid command\n");
+            printf("---------Invalid command---------\n");
+            Sleep(1000);
             break;
         }
     }
