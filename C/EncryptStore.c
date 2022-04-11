@@ -596,7 +596,7 @@ int main()
     strcat(createDir, DataDirectory);
     system(createDir);
 
-    char inp;
+    int inp;
 
     while (1)
     {
@@ -605,21 +605,21 @@ int main()
 
         printf("~> ");
 
-        scanf("%c", &inp);
+        scanf("%d", &inp);
         getchar();
 
         switch (inp)
         {
-        case '1':
+        case 1:
             loginScreen();
             break;
-        case '2':
+        case 2:
             signupScreen();
             break;
-        case '3':
+        case 3:
             userExistence();
             break;
-        case '4':
+        case 4:
             system("cls");
             exit(0);
             break;
