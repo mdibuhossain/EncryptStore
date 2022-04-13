@@ -220,6 +220,13 @@ void addNewSocialData(char *username)
     askToReturnMainMenu();
 }
 
+// Data Table title
+void displayDataTitle()
+{
+    printf("\t   %-25s %-35s %-20s\n", "PLATFORM", "EMAIL", "PASSWORD");
+    puts("---------------------------------------------------------------------------------------------------");
+}
+
 // filter social data by platform
 void filterByPlatform(char *username)
 {
@@ -243,6 +250,7 @@ void filterByPlatform(char *username)
         return;
     }
     system("cls");
+    displayDataTitle();
     while (fread(&tmpFilteredSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
         if (!strcmp(tmpFilteredSocial.platform, tmpPlatform))
@@ -284,6 +292,7 @@ void filterByEmail(char *username)
         return;
     }
     system("cls");
+    displayDataTitle();
     while (fread(&tmpFilteredData, sizeof(socialData), 1, userDataFile) == 1)
     {
         if (feof(userDataFile))
@@ -317,6 +326,7 @@ void showAllSocialData(char *username)
         return;
     }
     system("cls");
+    displayDataTitle();
     while (fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
         if (feof(userDataFile))
