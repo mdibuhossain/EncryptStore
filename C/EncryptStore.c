@@ -63,7 +63,7 @@ void loadingScreen()
     for (int i = 1; i <= 42; i++)
     {
         printf("--");
-        Sleep(1); // milliseconds
+        Sleep(10); // milliseconds
     }
 }
 
@@ -409,11 +409,11 @@ void loginScreen()
     gotoxy(30, 4);
     printf("username      :");
 
-    gotoxy(46, 4);
-    gets(userData.username);
-
     gotoxy(30, 6);
     printf("password      :");
+
+    gotoxy(46, 4);
+    gets(userData.username);
 
     // Password input
     gotoxy(46, 6);
@@ -496,11 +496,11 @@ void signupScreen()
     gotoxy(30, 6);
     printf("username      :");
 
-    gotoxy(46, 6);
-    gets(userData.username);
-
     gotoxy(30, 8);
     printf("password      :");
+
+    gotoxy(46, 6);
+    gets(userData.username);
 
     gotoxy(46, 8);
     gets(userData.passcode);
