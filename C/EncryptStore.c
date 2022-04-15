@@ -99,6 +99,14 @@ void loadErrorMessage()
     // system("pause");
 }
 
+// Invalid command
+void invalidCommand()
+{
+    system("cls");
+    printf("\n\n\t\t\t\t------------Invalid command------------\n");
+    Sleep(1000);
+}
+
 // User Exist
 void userExist()
 {
@@ -314,7 +322,7 @@ void filterByEmail(char *username)
 }
 
 // show all social data
-void showAllSocialData(char *username)
+int showAllSocialData(char *username)
 {
     system("cls");
     socialData tmpAllSocial;
@@ -329,13 +337,76 @@ void showAllSocialData(char *username)
     displayDataTitle();
     while (fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
-        if (feof(userDataFile))
-            break;
         printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpAllSocial.platform, tmpAllSocial.email, tmpAllSocial.password);
         puts("---------------------------------------------------------------------------------------------------");
     }
     fclose(userDataFile);
-    askToReturnMainMenu();
+    return count;
+}
+
+// delete single data
+void deleteData(char *username)
+{
+    int serialNumber;
+    int totalData = showAllSocialData(username);
+    socialData *filterData;
+    filterData = (socialData *)malloc(totalData * sizeof(socialData));
+
+    userDataFile = fopen(intoUserData(username), "rb");
+    if (userDataFile == NULL)
+    {
+        isFileExist(userDataFile);
+        return;
+    }
+    int index = 0;
+    while (fread(&filterData[index], sizeof(socialData), 1, userDataFile) == 1)
+    {
+        index++;
+    }
+    fclose(userDataFile);
+
+    printf("\nPut the serial number => ");
+    scanf("%d", &serialNumber);
+
+    if (serialNumber >= 1 && serialNumber <= totalData)
+    {
+        puts("---------------------------------------------------------------------------------------------------");
+        printf("\t%-25s %-35s %-20s\n", filterData[serialNumber - 1].platform, filterData[serialNumber - 1].email, filterData[serialNumber - 1].password);
+        puts("---------------------------------------------------------------------------------------------------");
+    }
+    else
+    {
+        puts("Not found");
+        sleep(1);
+        return;
+    }
+
+    printf("Are you sure want to delete (y / n): ");
+    char ch = getch();
+
+    if (ch == 'Y' || ch == 'y')
+    {
+        userDataFile = fopen(intoUserData(username), "wb");
+        if (userDataFile == NULL)
+        {
+            isFileExist(userDataFile);
+            return;
+        }
+        for (int i = 1; i <= totalData; i++)
+        {
+            if (i != serialNumber)
+            {
+                fwrite(&filterData[i - 1], sizeof(socialData), 1, userDataFile);
+            }
+        }
+        fclose(userDataFile);
+        puts("Delete successfully");
+    }
+    else
+    {
+        puts("Deletation abort");
+    }
+    sleep(1);
 }
 
 // menu after user logged in
@@ -349,43 +420,52 @@ void loggedInMenu()
     gotoxy(35, 6);
     printf("Press 2 for FILTER DATA BY PLATFORM\n");
     gotoxy(35, 8);
-    printf("Press 3 for SHOW ALL DATA\n");
+    printf("Press 3 for FILTER DATA BY EMAIL\n");
     gotoxy(35, 10);
-    printf("Press 4 for FILTER DATA BY EMAIL\n");
+    printf("Press 4 for SHOW ALL DATA\n");
     gotoxy(35, 12);
-    printf("Press 5 for SIGN OUT\n");
-    gotoxy(25, 14);
+    printf("Press 5 for DELETE DATA\n");
+    gotoxy(35, 14);
+    printf("Press 6 for SIGN OUT\n");
+    gotoxy(25, 16);
     printf("-------------------------------------------------\n");
 }
 
 // User Logged in
 void userLoggedIn(char *username)
 {
-    char inp;
+    int inp;
     while (1)
     {
         loggedInMenu();
         printf("~> ");
-        scanf("%c", &inp);
+        scanf("%d", &inp);
         getchar();
         switch (inp)
         {
-        case '1':
+        case 1:
             addNewSocialData(username);
             break;
-        case '2':
+        case 2:
             filterByPlatform(username);
             break;
-        case '3':
-            showAllSocialData(username);
-            break;
-        case '4':
+        case 3:
             filterByEmail(username);
             break;
-        case '5':
+        case 4:
+            showAllSocialData(username);
+            askToReturnMainMenu();
+            break;
+        case 5:
+            deleteData(username);
+            break;
+        case 6:
             printf("pressed 5\n");
             loadingScreen();
             return;
+            break;
+        default:
+            invalidCommand();
             break;
         }
     }
@@ -634,8 +714,7 @@ int main()
             exit(0);
             break;
         default:
-            printf("---------Invalid command---------\n");
-            Sleep(1000);
+            invalidCommand();
             break;
         }
     }
