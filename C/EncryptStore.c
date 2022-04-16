@@ -1,5 +1,5 @@
 #include <stdio.h>
-// #include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <windows.h>
 #define DataDirectory "data"
@@ -74,27 +74,48 @@ void askToReturnMainMenu()
     getch();
 }
 
+// status message
+void statusMessage(char st[])
+{
+    system("cls");
+    int len = strlen(st);
+    gotoxy(35, 8);
+    for (int i = 0; i < (16 + len); i++)
+        printf("*");
+    gotoxy(35, 10);
+    for (int i = 0; i < 8; i++)
+        printf(" ");
+    printf("%s", st);
+    for (int i = 0; i < 8; i++)
+        printf(" ");
+    gotoxy(35, 12);
+    for (int i = 0; i < (16 + len); i++)
+        printf("*");
+    gotoxy(33, 19);
+    askToReturnMainMenu();
+}
+
 // Error message for username and password length
 void loadErrorMessage()
 {
     system("cls");
 
-    gotoxy(33, 10);
+    gotoxy(33, 8);
     printf("!=================================!");
 
-    gotoxy(33, 12);
+    gotoxy(33, 10);
     printf("!......Username and Password......!\n");
 
-    gotoxy(33, 14);
+    gotoxy(33, 12);
     printf("!............Should be............!\n");
 
-    gotoxy(33, 16);
+    gotoxy(33, 14);
     printf("!..(max:12 char and min: 4 char)..!\n");
 
-    gotoxy(33, 18);
+    gotoxy(33, 16);
     printf("!=================================!");
 
-    gotoxy(33, 23);
+    gotoxy(33, 21);
     askToReturnMainMenu();
     // system("pause");
 }
@@ -331,7 +352,7 @@ int showAllSocialData(char *username)
     if (userDataFile == NULL)
     {
         isFileExist(userDataFile);
-        return;
+        return -1;
     }
     system("cls");
     displayDataTitle();
@@ -377,7 +398,7 @@ void deleteData(char *username)
     else
     {
         puts("Not found");
-        sleep(1);
+        Sleep(1);
         return;
     }
 
@@ -406,7 +427,7 @@ void deleteData(char *username)
     {
         puts("Deletation abort");
     }
-    sleep(1);
+    Sleep(1);
 }
 
 // menu after user logged in
@@ -515,42 +536,36 @@ void loginScreen()
     }
     userData.passcode[i] = '\0';
 
-    if (!(strlen(userData.username) >= 4 && strlen(userData.username) <= 12) ||
-        !(strlen(userData.passcode) >= 4 && strlen(userData.passcode) <= 12))
+    if (userRecord == NULL)
     {
-        loadErrorMessage();
+        isFileExist(userRecord);
+        return;
     }
-    else
+    int flag = 1;
+    while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
     {
-        if (userRecord == NULL)
+        if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
         {
-            isFileExist(userRecord);
+            flag = 0;
+            system("cls");
+            gotoxy(40, 16);
+            printf("Welcome, %s\n", userData.username);
+            gotoxy(35, 25);
+            system("pause");
+            userLoggedIn(userData.username);
             return;
         }
-        int flag = 1;
-        while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
-        {
-            if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
-            {
-                flag = 0;
-                system("cls");
-                gotoxy(40, 16);
-                printf("Welcome, %s\n", userData.username);
-                gotoxy(35, 25);
-                system("pause");
-                userLoggedIn(userData.username);
-                return;
-            }
-        }
-        if (flag)
-        {
-            system("cls");
-            gotoxy(35, 16);
-            printf("------Invalid account------\n");
-            gotoxy(35, 25);
-            askToReturnMainMenu();
-            // system("pause");
-        }
+    }
+    if (flag)
+    {
+        statusMessage("Invalid username or password");
+        // system("cls");
+        // gotoxy(35, 10);
+        // printf("------Invalid account------\n");
+        // gotoxy(33, 19);
+        // askToReturnMainMenu();
+
+        // system("pause");
     }
 
     // File close
@@ -605,7 +620,7 @@ void signupScreen()
             if (!strcmp(userData.username, storedData.username))
             {
                 fclose(userRecord);
-                userExist();
+                statusMessage("Username not available");
                 return;
             }
         }
@@ -659,13 +674,13 @@ void userExistence()
         if (!strcmp(storedData.username, userData.username))
         {
             flag = 0;
-            userExist();
+            statusMessage("User exist");
             break;
         }
     }
     if (flag)
     {
-        userDoesntExist();
+        statusMessage("User dosen't exist");
     }
 
     // File close
