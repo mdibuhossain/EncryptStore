@@ -92,7 +92,8 @@ void statusMessage(char st[])
     for (int i = 0; i < (16 + len); i++)
         printf("*");
     gotoxy(33, 19);
-    askToReturnMainMenu();
+    Sleep(1000);
+    // askToReturnMainMenu();
 }
 
 // Error message for username and password length
@@ -547,11 +548,9 @@ void loginScreen()
         if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
         {
             flag = 0;
-            system("cls");
-            gotoxy(40, 16);
-            printf("Welcome, %s\n", userData.username);
-            gotoxy(35, 25);
-            system("pause");
+            char msg[] = "Welcome, ";
+            strcat(msg, userData.username);
+            statusMessage(msg);
             userLoggedIn(userData.username);
             return;
         }
@@ -708,7 +707,8 @@ int main()
         // Display main menu
         mainScreen();
 
-        printf("~> ");
+        gotoxy(25, 16);
+        printf("Enter your choice ~> ");
 
         scanf("%d", &inp);
         getchar();
