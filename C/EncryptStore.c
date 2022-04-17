@@ -78,22 +78,23 @@ void askToReturnMainMenu()
 void statusMessage(char st[])
 {
     system("cls");
+    system("color F9");
     int len = strlen(st);
     gotoxy(35, 8);
-    for (int i = 0; i < (16 + len); i++)
+    for (int i = 0; i < (14 + len); i++)
         printf("*");
     gotoxy(35, 10);
-    for (int i = 0; i < 8; i++)
-        printf(" ");
-    printf("%s", st);
-    for (int i = 0; i < 8; i++)
-        printf(" ");
+    for (int i = 0; i < 6; i++)
+        printf("\xB2");
+    printf(" %s ", st);
+    for (int i = 0; i < 6; i++)
+        printf("\xB2");
     gotoxy(35, 12);
-    for (int i = 0; i < (16 + len); i++)
+    for (int i = 0; i < (14 + len); i++)
         printf("*");
     gotoxy(33, 19);
-    Sleep(1000);
-    // askToReturnMainMenu();
+    Sleep(1500);
+    system("color F0");
 }
 
 // Error message for username and password length
@@ -129,55 +130,6 @@ void invalidCommand()
     Sleep(1000);
 }
 
-// User Exist
-void userExist()
-{
-    system("cls");
-
-    gotoxy(33, 10);
-    printf("|=================================|");
-
-    gotoxy(33, 11);
-    printf("|.................................|\n");
-
-    gotoxy(33, 12);
-    printf("|...........User Exist............|\n");
-
-    gotoxy(33, 13);
-    printf("|.................................|\n");
-
-    gotoxy(33, 14);
-    printf("|=================================|");
-
-    gotoxy(33, 18);
-    askToReturnMainMenu();
-    // system("pause");
-}
-
-// User Doesn't Exist
-void userDoesntExist()
-{
-    system("cls");
-
-    gotoxy(33, 10);
-    printf("!=================================!");
-
-    gotoxy(33, 11);
-    printf("!.................................!\n");
-
-    gotoxy(33, 12);
-    printf("!.......User Doesn't Exist........!\n");
-
-    gotoxy(33, 13);
-    printf("!.................................!\n");
-
-    gotoxy(33, 14);
-    printf("!=================================!");
-
-    gotoxy(33, 18);
-    askToReturnMainMenu();
-    // system("pause");
-}
 
 // checking file existance
 void isFileExist(FILE *checkFile)
@@ -558,13 +510,6 @@ void loginScreen()
     if (flag)
     {
         statusMessage("Invalid username or password");
-        // system("cls");
-        // gotoxy(35, 10);
-        // printf("------Invalid account------\n");
-        // gotoxy(33, 19);
-        // askToReturnMainMenu();
-
-        // system("pause");
     }
 
     // File close
