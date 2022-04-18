@@ -4,7 +4,7 @@
 #include <windows.h>
 #define DataDirectory "data"
 #define dataPath "data/"
-#define personPath "data/person.bin"
+#define personPath "data/users.bin"
 #define MAX_PASSWORD_SIZE 50
 #define MAX_USERNAME_SIZE 50
 #define MAX_PLATFORM_SIZE 50
