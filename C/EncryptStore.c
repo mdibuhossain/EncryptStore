@@ -53,6 +53,8 @@ void mainScreen()
     printf("Press 4 for Terminate Program\n");
     gotoxy(25, 12);
     printf("------------------------------------------------\n");
+    gotoxy(25, 16);
+    printf("Enter your choice ~> ");
 }
 
 // Loading Screen
@@ -378,6 +380,14 @@ void deleteData(char *username)
     Sleep(1);
 }
 
+// Edit data
+void editData(char *username)
+{
+    system("cls");
+    puts("Edit option");
+    askToReturnMainMenu();
+}
+
 // menu after user logged in
 void loggedInMenu()
 {
@@ -395,9 +405,13 @@ void loggedInMenu()
     gotoxy(35, 12);
     printf("Press 5 for DELETE DATA\n");
     gotoxy(35, 14);
-    printf("Press 6 for SIGN OUT\n");
-    gotoxy(25, 16);
+    printf("Press 6 for EDIT DATA\n");
+    gotoxy(35, 16);
+    printf("Press 7 for SIGN OUT\n");
+    gotoxy(25, 18);
     printf("-------------------------------------------------\n");
+    gotoxy(25, 22);
+    printf("Enter your choice ~> ");
 }
 
 // User Logged in
@@ -407,7 +421,7 @@ void userLoggedIn(char *username)
     while (1)
     {
         loggedInMenu();
-        printf("~> ");
+
         scanf("%d", &inp);
         getchar();
         switch (inp)
@@ -429,8 +443,11 @@ void userLoggedIn(char *username)
             deleteData(username);
             break;
         case 6:
-            printf("pressed 5\n");
-            loadingScreen();
+            editData(username);
+            break;
+        case 7:
+            statusMessage("Logged out");
+            // loadingScreen();
             return;
             break;
         default:
@@ -632,7 +649,7 @@ int main()
     // CMD window resize
     // system("MODE 100, 100"); // MODE Columns, Rows (ASCII)
 
-    system("title Authentication Form");
+    system("title EncryptStore");
     system("color F0");
 
     // create folder --> "md data"
@@ -647,8 +664,8 @@ int main()
         // Display main menu
         mainScreen();
 
-        gotoxy(25, 16);
-        printf("Enter your choice ~> ");
+        // gotoxy(25, 16);
+        // printf("Enter your choice ~> ");
 
         scanf("%d", &inp);
         getchar();
