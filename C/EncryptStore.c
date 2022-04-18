@@ -42,7 +42,7 @@ void mainScreen()
 {
     system("cls");
     gotoxy(25, 2);
-    printf("--------------------WELCOME---------------------\n");
+    printf("------------------- WELCOME --------------------\n");
     gotoxy(39, 4);
     printf("Press 1 for LOG IN\n");
     gotoxy(39, 6);
@@ -126,10 +126,9 @@ void loadErrorMessage()
 void invalidCommand()
 {
     system("cls");
-    printf("\n\n\t\t\t\t------------Invalid command------------\n");
+    printf("\n\n\t\t\t\t----------- Invalid command -----------\n");
     Sleep(1000);
 }
-
 
 // checking file existance
 void isFileExist(FILE *checkFile)
@@ -175,7 +174,7 @@ void addNewSocialData(char *username)
     socialData userInfo;
     system("cls");
     gotoxy(25, 2);
-    printf("----------------------NewData-----------------------\n");
+    printf("--------------------- NewData ----------------------\n");
     gotoxy(35, 4);
     printf("%-12s :\n", "Platform");
     gotoxy(35, 6);
@@ -195,11 +194,7 @@ void addNewSocialData(char *username)
 
     fwrite(&userInfo, sizeof(socialData), 1, userDataFile);
     fclose(userDataFile);
-    system("cls");
-    gotoxy(35, 10);
-    printf("--------Data Stored--------\n");
-    gotoxy(35, 15);
-    askToReturnMainMenu();
+    statusMessage("Data stored successfully");
 }
 
 // Data Table title
@@ -258,7 +253,7 @@ void filterByEmail(char *username)
     socialData tmpFilteredData;
     char tmpEmail[MAX_EMAIL_SIZE];
     gotoxy(25, 2);
-    printf("----------------------Filter By Platform-----------------------\n");
+    printf("----------------------Filter By Email-----------------------\n");
     gotoxy(35, 4);
     printf("%-8s :\n", "Email");
     gotoxy(46, 4);
@@ -388,7 +383,7 @@ void loggedInMenu()
 {
     system("cls");
     gotoxy(25, 2);
-    printf("----------------------USER-----------------------\n");
+    printf("--------------------- USER ----------------------\n");
     gotoxy(35, 4);
     printf("Press 1 for ADD NEW DATA\n");
     gotoxy(35, 6);
