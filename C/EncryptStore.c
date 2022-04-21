@@ -387,9 +387,42 @@ void deleteData(char *username)
 // Edit data
 void editData(char *username)
 {
-    system("cls");
-    puts("Edit option");
-    askToReturnMainMenu();
+    int serialNumber;
+    int totalData = showAllSocialData(username);
+    if (totalData == 0)
+        return;
+    socialData *filterData;
+    filterData = (socialData *)malloc(totalData * sizeof(socialData));
+
+    userDataFile = fopen(intoUserData(username), "rb");
+    if (userDataFile == NULL)
+    {
+        fclose(userDataFile);
+        statusMessage("Data not found");
+        return;
+    }
+    int index = 0;
+    while (fread(&filterData[index], sizeof(socialData), 1, userDataFile) == 1)
+    {
+        index++;
+    }
+    fclose(userDataFile);
+
+    printf("\nPut the serial number => ");
+    scanf("%d", &serialNumber);
+
+    if (serialNumber >= 1 && serialNumber <= totalData)
+    {
+        puts("===================================================================================================");
+        printf("\t%-25s %-35s %-20s\n", filterData[serialNumber - 1].platform, filterData[serialNumber - 1].email, filterData[serialNumber - 1].password);
+        puts("===================================================================================================");
+        system("pause");
+    }
+    else
+    {
+        statusMessage("Not found");
+        return;
+    }
 }
 
 // menu after user logged in
