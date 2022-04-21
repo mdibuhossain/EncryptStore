@@ -3,8 +3,8 @@
 #include <string.h>
 #include <windows.h>
 #define DataDirectory "data"
-#define dataPath "data/"
-#define personPath "data/users.bin"
+#define dataPath "data\\"
+#define personPath "data\\users.bin"
 #define MAX_PASSWORD_SIZE 50
 #define MAX_USERNAME_SIZE 50
 #define MAX_PLATFORM_SIZE 50
@@ -441,7 +441,49 @@ void editData(char *username)
             gotoxy(50, 14);
             gets(newData.password);
 
-            system("pause");
+            if (!strlen(newData.platform))
+            {
+                strcpy(newData.platform, filterData[serialNumber - 1].platform);
+            }
+            if (!strlen(newData.email))
+            {
+                strcpy(newData.email, filterData[serialNumber - 1].email);
+            }
+            if (!strlen(newData.password))
+            {
+                strcpy(newData.password, filterData[serialNumber - 1].password);
+            }
+
+            char tmp_username[MAX_USERNAME_SIZE + 10] = "";
+            char tmp_final_username[MAX_USERNAME_SIZE + 5] = " ";
+            char del[5 * MAX_USERNAME_SIZE] = "del ";
+            char ren[5 * MAX_USERNAME_SIZE] = "ren ";
+            strcpy(tmp_username, username);
+            strcat(tmp_username, "_tmp");
+            strcat(del, intoUserData(username));
+            strcat(ren, intoUserData(tmp_username));
+            strcat(tmp_final_username, username);
+            strcat(tmp_final_username, ".bin");
+            strcat(ren, tmp_final_username);
+
+            userDataFile = fopen(intoUserData(tmp_username), "wb");
+            for (int i = 1; i <= totalData; i++)
+            {
+                if (i == serialNumber)
+                {
+                    fwrite(&newData, sizeof(socialData), 1, userDataFile);
+                }
+                else
+                {
+                    fwrite(&filterData[i - 1], sizeof(socialData), 1, userDataFile);
+                }
+            }
+            fclose(userDataFile);
+
+            // system("del data\\ibra.bin");
+            // system("ren data\\ibra_tmp.bin ibra.bin");
+            system(del);
+            system(ren);
             statusMessage("Successfully updated");
         }
         else
