@@ -301,8 +301,10 @@ int showAllSocialData(char *username)
     int count = 0;
     if (userDataFile == NULL)
     {
-        isFileExist(userDataFile);
-        return -1;
+        fclose(userDataFile);
+        statusMessage("Data not found");
+        // isFileExist(userDataFile);
+        return 0;
     }
     system("cls");
     displayDataTitle();
@@ -320,13 +322,16 @@ void deleteData(char *username)
 {
     int serialNumber;
     int totalData = showAllSocialData(username);
+    if (totalData == 0)
+        return;
     socialData *filterData;
     filterData = (socialData *)malloc(totalData * sizeof(socialData));
 
     userDataFile = fopen(intoUserData(username), "rb");
     if (userDataFile == NULL)
     {
-        isFileExist(userDataFile);
+        fclose(userDataFile);
+        statusMessage("Data not found");
         return;
     }
     int index = 0;
@@ -347,8 +352,7 @@ void deleteData(char *username)
     }
     else
     {
-        puts("Not found");
-        Sleep(1);
+        statusMessage("Not found");
         return;
     }
 
