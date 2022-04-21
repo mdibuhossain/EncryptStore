@@ -95,7 +95,7 @@ void statusMessage(char st[])
     for (int i = 0; i < (14 + len); i++)
         printf("*");
     gotoxy(33, 19);
-    Sleep(1500);
+    Sleep(800);
     system("color F0");
 }
 
@@ -375,13 +375,13 @@ void deleteData(char *username)
             }
         }
         fclose(userDataFile);
-        puts("Delete successfully");
+        statusMessage("Delete successfully");
     }
     else
     {
-        puts("Deletation abort");
+        statusMessage("Deletation abort");
     }
-    Sleep(1);
+    // Sleep(1);
 }
 
 // Edit data
@@ -410,13 +410,44 @@ void editData(char *username)
 
     printf("\nPut the serial number => ");
     scanf("%d", &serialNumber);
+    fflush(stdin);
 
     if (serialNumber >= 1 && serialNumber <= totalData)
     {
+        system("cls");
         puts("===================================================================================================");
         printf("\t%-25s %-35s %-20s\n", filterData[serialNumber - 1].platform, filterData[serialNumber - 1].email, filterData[serialNumber - 1].password);
         puts("===================================================================================================");
-        system("pause");
+        printf("Are you sure want to edit (y / n): ");
+        char ch;
+        scanf("%c", &ch);
+        fflush(stdin);
+
+        if (ch == 'Y' || ch == 'y')
+        {
+            socialData newData;
+            puts("\n\n\t\t\t\tIf you don't want to update any field\n\t\t\t\t\t  Leave that blank.");
+            gotoxy(35, 10);
+            printf("%-12s :\n", "Platform");
+            gotoxy(35, 12);
+            printf("%-12s :\n", "Email");
+            gotoxy(35, 14);
+            printf("%-12s :\n", "Password");
+
+            gotoxy(50, 10);
+            gets(newData.platform);
+            gotoxy(50, 12);
+            gets(newData.email);
+            gotoxy(50, 14);
+            gets(newData.password);
+
+            system("pause");
+            statusMessage("Successfully updated");
+        }
+        else
+        {
+            statusMessage("Abort editing");
+        }
     }
     else
     {
