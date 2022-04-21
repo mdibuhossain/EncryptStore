@@ -480,10 +480,8 @@ void editData(char *username)
             }
             fclose(userDataFile);
 
-            // system("del data\\ibra.bin");
-            // system("ren data\\ibra_tmp.bin ibra.bin");
-            system(del);
-            system(ren);
+            system(del); // delete previous user file
+            system(ren); // rename new updated file to current user name
             statusMessage("Successfully updated");
         }
         else
