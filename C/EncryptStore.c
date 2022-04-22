@@ -303,7 +303,6 @@ int showAllSocialData(char *username)
     {
         fclose(userDataFile);
         statusMessage("Data not found");
-        // isFileExist(userDataFile);
         return 0;
     }
     system("cls");
@@ -323,7 +322,10 @@ void deleteData(char *username)
     int serialNumber;
     int totalData = showAllSocialData(username);
     if (totalData == 0)
+    {
+        statusMessage("Empty");
         return;
+    }
     socialData *filterData;
     filterData = (socialData *)malloc(totalData * sizeof(socialData));
 
@@ -390,7 +392,10 @@ void editData(char *username)
     int serialNumber;
     int totalData = showAllSocialData(username);
     if (totalData == 0)
+    {
+        statusMessage("Empty");
         return;
+    }
     socialData *filterData;
     filterData = (socialData *)malloc(totalData * sizeof(socialData));
 
