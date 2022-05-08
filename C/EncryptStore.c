@@ -228,7 +228,8 @@ void filterByPlatform(char *username)
     int count = 0, flag = 1;
     if (userDataFile == NULL)
     {
-        isFileExist(userDataFile);
+        fclose(userDataFile);
+        statusMessage("Data not found");
         return;
     }
     system("cls");
@@ -244,7 +245,7 @@ void filterByPlatform(char *username)
     }
     if (flag)
     {
-        isFileExist(userDataFile);
+        statusMessage("Data not found");
         return;
     }
     fclose(userDataFile);
@@ -270,7 +271,8 @@ void filterByEmail(char *username)
     int count = 0, flag = 1;
     if (userDataFile == NULL)
     {
-        isFileExist(userDataFile);
+        fclose(userDataFile);
+        statusMessage("Data not found");
         return;
     }
     system("cls");
@@ -288,7 +290,7 @@ void filterByEmail(char *username)
     }
     if (flag)
     {
-        isFileExist(userDataFile);
+        statusMessage("Data not found");
         return;
     }
     fclose(userDataFile);
