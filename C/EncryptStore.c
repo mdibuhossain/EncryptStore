@@ -42,16 +42,18 @@ void mainScreen()
 {
     system("cls");
     gotoxy(25, 2);
-    printf("------------------- WELCOME --------------------\n");
-    gotoxy(39, 4);
+    printf("------------------ WELCOME TO ------------------\n");
+    gotoxy(25, 3);
+    printf("----------------- EncryptStore -----------------");
+    gotoxy(39, 5);
     printf("Press 1 for LOG IN\n");
-    gotoxy(39, 6);
-    printf("Press 2 for SING UP\n");
-    gotoxy(39, 8);
+    gotoxy(39, 7);
+    printf("Press 2 for SIGN UP\n");
+    gotoxy(39, 9);
     printf("Press 3 for Check User Existence\n");
-    gotoxy(39, 10);
+    gotoxy(39, 11);
     printf("Press 4 for Terminate Program\n");
-    gotoxy(25, 12);
+    gotoxy(25, 13);
     printf("------------------------------------------------\n");
     gotoxy(25, 16);
     printf("Enter your choice ~> ");
