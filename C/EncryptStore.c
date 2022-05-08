@@ -97,7 +97,8 @@ void statusMessage(char st[])
     for (int i = 0; i < (14 + len); i++)
         printf("*");
     gotoxy(33, 19);
-    Sleep(800);
+    // Sleep(800);
+    askToReturnMainMenu();
     system("color F0");
 }
 
@@ -305,7 +306,7 @@ int showAllSocialData(char *username)
     {
         fclose(userDataFile);
         statusMessage("Data not found");
-        return 0;
+        return -1;
     }
     system("cls");
     displayDataTitle();
@@ -323,6 +324,8 @@ void deleteData(char *username)
 {
     int serialNumber;
     int totalData = showAllSocialData(username);
+    if (totalData == -1)
+        return;
     if (totalData == 0)
     {
         statusMessage("Empty");
@@ -393,6 +396,8 @@ void editData(char *username)
 {
     int serialNumber;
     int totalData = showAllSocialData(username);
+    if (totalData == -1)
+        return;
     if (totalData == 0)
     {
         statusMessage("Empty");
@@ -579,7 +584,6 @@ void loginScreen()
     system("cls");
 
     person userData, storedData;
-    // FILE *userRecord;
 
     // File open for read
     userRecord = fopen(personPath, "rb");
@@ -651,7 +655,6 @@ void signupScreen()
     system("cls");
 
     person userData, storedData;
-    // FILE *userRecord;
 
     gotoxy(25, 2);
     printf("--------------------SIGN IN---------------------\n");
@@ -721,7 +724,7 @@ void userExistence()
     system("cls");
 
     person userData, storedData;
-    // FILE *userRecord;
+
     userRecord = fopen(personPath, "rb");
 
     if (userRecord == NULL)
@@ -778,9 +781,6 @@ int main()
     {
         // Display main menu
         mainScreen();
-
-        // gotoxy(25, 16);
-        // printf("Enter your choice ~> ");
 
         scanf("%d", &inp);
         getchar();
