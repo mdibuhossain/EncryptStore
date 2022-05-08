@@ -373,7 +373,8 @@ void deleteData(char *username)
         userDataFile = fopen(intoUserData(username), "wb");
         if (userDataFile == NULL)
         {
-            isFileExist(userDataFile);
+            fclose(userDataFile);
+            statusMessage("Data not found");
             return;
         }
         for (int i = 1; i <= totalData; i++)
@@ -624,7 +625,8 @@ void loginScreen()
 
     if (userRecord == NULL)
     {
-        isFileExist(userRecord);
+        fclose(userRecord);
+        statusMessage("Data not found");
         return;
     }
     int flag = 1;
@@ -731,7 +733,8 @@ void userExistence()
 
     if (userRecord == NULL)
     {
-        isFileExist(userRecord);
+        fclose(userRecord);
+        statusMessage("Data not found");
         return;
     }
 
