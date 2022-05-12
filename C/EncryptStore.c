@@ -562,6 +562,58 @@ void editData(char *username)
         statusMessage("Not found");
         return;
     }
+
+    free(filterData);
+}
+
+// delete account
+void deleteAccount(char *username)
+{
+    userDataFile = fopen(intoUserData(username), "rb");
+    char del[5 * MAX_USERNAME_SIZE] = "del ";
+    if (userDataFile != NULL)
+    {
+        fclose(userDataFile);
+        strcat(del, intoUserData(username));
+        system(del); // delete user social information
+        statusMessage("Account delete successfully");
+    }
+    else
+    {
+        fclose(userDataFile);
+        statusMessage("Account already deleted");
+    }
+
+    userRecord = fopen(personPath, "rb");
+    int totalUser = 0;
+    person *usersTmp;
+    person tmpUser;
+    while (fread(&tmpUser, sizeof(person), 1, userRecord) == 1)
+    {
+        printf("%-20s %-20s\n", tmpUser.username, tmpUser.passcode);
+        ++totalUser;
+    }
+    rewind(userRecord);
+    usersTmp = (person *)malloc(totalUser * sizeof(person));
+    int index = 0;
+    while (fread(&usersTmp[index], sizeof(person), 1, userRecord) == 1)
+    {
+        decryptUserData(&usersTmp[index]);
+        index++;
+    }
+    fclose(userRecord);
+
+    userRecord = fopen(personPath, "wb");
+    for (int i = 0; i < totalUser; i++)
+    {
+        if (strcmp(username, usersTmp[i].username))
+        {
+            encryptUserData(&usersTmp[i]);
+            fwrite(&usersTmp[i], sizeof(person), 1, userRecord);
+        }
+    }
+    free(usersTmp);
+    fclose(userRecord);
 }
 
 // menu after user logged in
@@ -569,23 +621,25 @@ void loggedInMenu()
 {
     system("cls");
     gotoxy(25, 2);
-    printf("--------------------- USER ----------------------\n");
+    puts("--------------------- USER ----------------------");
     gotoxy(35, 4);
-    printf("Press 1 for ADD NEW DATA\n");
+    puts("Press 1 for ADD NEW DATA");
     gotoxy(35, 6);
-    printf("Press 2 for FILTER DATA BY PLATFORM\n");
+    puts("Press 2 for FILTER DATA BY PLATFORM");
     gotoxy(35, 8);
-    printf("Press 3 for FILTER DATA BY EMAIL\n");
+    puts("Press 3 for FILTER DATA BY EMAIL");
     gotoxy(35, 10);
-    printf("Press 4 for SHOW ALL DATA\n");
+    puts("Press 4 for SHOW ALL DATA");
     gotoxy(35, 12);
-    printf("Press 5 for DELETE DATA\n");
+    puts("Press 5 for DELETE DATA");
     gotoxy(35, 14);
-    printf("Press 6 for EDIT DATA\n");
+    puts("Press 6 for EDIT DATA");
     gotoxy(35, 16);
-    printf("Press 7 for SIGN OUT\n");
-    gotoxy(25, 18);
-    printf("-------------------------------------------------\n");
+    puts("Press 7 for DELETE THIS ACCOUNT");
+    gotoxy(35, 18);
+    puts("Press 8 for LOG OUT");
+    gotoxy(25, 20);
+    puts("-------------------------------------------------");
     gotoxy(25, 22);
     printf("Enter your choice ~> ");
 }
@@ -622,10 +676,11 @@ void userLoggedIn(char *username)
             editData(username);
             break;
         case 7:
-            statusMessage("Logged out");
+            deleteAccount(username);
+            return;
+        case 8:
             // loadingScreen();
             return;
-            break;
         default:
             invalidCommand();
             break;
