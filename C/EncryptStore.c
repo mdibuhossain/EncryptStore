@@ -37,6 +37,48 @@ typedef struct socialData
 FILE *userRecord = NULL;
 FILE *userDataFile = NULL;
 
+// Encrypt and Decrypt data -------------------
+void subEncrypt(char *st)
+{
+    int i;
+    int len = strlen(st);
+    for (i = 0; i < len; i++)
+    {
+        st[i] = st[i] + 1;
+    }
+}
+void subDecrypt(char *st)
+{
+    unsigned int len = strlen(st);
+    for (int i = 0; i < len; i++)
+    {
+        st[i] = st[i] - 1;
+    }
+}
+void encryptUserData(person *user)
+{
+    subEncrypt(user->username);
+    subEncrypt(user->passcode);
+}
+void encryptSocialData(socialData *data)
+{
+    subEncrypt(data->platform);
+    subEncrypt(data->email);
+    subEncrypt(data->password);
+}
+void decryptUserData(person *user)
+{
+    subDecrypt(user->username);
+    subDecrypt(user->passcode);
+}
+void decryptSocialData(socialData *data)
+{
+    subDecrypt(data->platform);
+    subDecrypt(data->email);
+    subDecrypt(data->password);
+}
+// --------------------------------------------
+
 // Main menu print function
 void mainScreen()
 {
@@ -74,7 +116,7 @@ void loadingScreen()
 // ask to return main menu
 void askToReturnMainMenu()
 {
-    system("echo Press any key to return Main menu");
+    system("echo Press any key to continue");
     getch();
 }
 
@@ -197,6 +239,7 @@ void addNewSocialData(char *username)
     strlwr(userInfo.platform);
     strlwr(userInfo.email);
 
+    encryptSocialData(&userInfo);
     fwrite(&userInfo, sizeof(socialData), 1, userDataFile);
     fclose(userDataFile);
     statusMessage("Data stored successfully");
@@ -236,6 +279,7 @@ void filterByPlatform(char *username)
     displayDataTitle();
     while (fread(&tmpFilteredSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
+        decryptSocialData(&tmpFilteredSocial);
         if (!strcmp(tmpFilteredSocial.platform, tmpPlatform))
         {
             printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpFilteredSocial.platform, tmpFilteredSocial.email, tmpFilteredSocial.password);
@@ -281,6 +325,7 @@ void filterByEmail(char *username)
     {
         if (feof(userDataFile))
             break;
+        decryptSocialData(&tmpFilteredData);
         if (!strcmp(tmpFilteredData.email, tmpEmail))
         {
             printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpFilteredData.platform, tmpFilteredData.email, tmpFilteredData.password);
@@ -314,6 +359,7 @@ int showAllSocialData(char *username)
     displayDataTitle();
     while (fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile) == 1)
     {
+        decryptSocialData(&tmpAllSocial);
         printf("\t%d. %-25s %-35s %-20s\n", ++count, tmpAllSocial.platform, tmpAllSocial.email, tmpAllSocial.password);
         puts("---------------------------------------------------------------------------------------------------");
     }
@@ -346,6 +392,7 @@ void deleteData(char *username)
     int index = 0;
     while (fread(&filterData[index], sizeof(socialData), 1, userDataFile) == 1)
     {
+        decryptSocialData(&filterData[index]);
         index++;
     }
     fclose(userDataFile);
@@ -381,6 +428,7 @@ void deleteData(char *username)
         {
             if (i != serialNumber)
             {
+                encryptSocialData(&filterData[i - 1]);
                 fwrite(&filterData[i - 1], sizeof(socialData), 1, userDataFile);
             }
         }
@@ -419,6 +467,7 @@ void editData(char *username)
     int index = 0;
     while (fread(&filterData[index], sizeof(socialData), 1, userDataFile) == 1)
     {
+        decryptSocialData(&filterData[index]);
         index++;
     }
     fclose(userDataFile);
@@ -486,10 +535,12 @@ void editData(char *username)
             {
                 if (i == serialNumber)
                 {
+                    encryptSocialData(&newData);
                     fwrite(&newData, sizeof(socialData), 1, userDataFile);
                 }
                 else
                 {
+                    encryptSocialData(&filterData[i - 1]);
                     fwrite(&filterData[i - 1], sizeof(socialData), 1, userDataFile);
                 }
             }
@@ -632,6 +683,7 @@ void loginScreen()
     int flag = 1;
     while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
     {
+        decryptUserData(&storedData);
         if (!strcmp(storedData.username, userData.username) && !strcmp(storedData.passcode, userData.passcode))
         {
             flag = 0;
@@ -695,6 +747,7 @@ void signupScreen()
         // checking user already existance
         while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
         {
+            decryptUserData(&storedData);
             if (!strcmp(userData.username, storedData.username))
             {
                 fclose(userRecord);
@@ -707,6 +760,7 @@ void signupScreen()
 
         // File open for append
         userRecord = fopen(personPath, "ab");
+        encryptUserData(&userData);
         fwrite(&userData, sizeof(person), 1, userRecord);
 
         // File close
@@ -750,6 +804,7 @@ void userExistence()
     int flag = 1;
     while (fread(&storedData, sizeof(person), 1, userRecord) == 1)
     {
+        decryptUserData(&storedData);
         if (!strcmp(storedData.username, userData.username))
         {
             flag = 0;
