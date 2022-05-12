@@ -413,7 +413,9 @@ void deleteData(char *username)
     }
 
     printf("Are you sure want to delete (y / n): ");
-    char ch = getch();
+    char ch;
+    fflush(stdin);
+    scanf("%c", &ch);
 
     if (ch == 'Y' || ch == 'y')
     {
@@ -858,8 +860,8 @@ int main()
             break;
         case 4:
             system("cls");
-            exit(0);
-            break;
+            puts("\n\n\n\tTHANK YOU\n\n\n\n");
+            return;
         default:
             invalidCommand();
             break;
