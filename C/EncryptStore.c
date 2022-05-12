@@ -587,19 +587,12 @@ void deleteAccount(char *username)
     userRecord = fopen(personPath, "rb");
     int totalUser = 0;
     person *usersTmp;
-    person tmpUser;
-    while (fread(&tmpUser, sizeof(person), 1, userRecord) == 1)
+    usersTmp = (person *)malloc(1 * sizeof(person));
+    while (fread(&usersTmp[totalUser], sizeof(person), 1, userRecord) == 1)
     {
-        printf("%-20s %-20s\n", tmpUser.username, tmpUser.passcode);
+        usersTmp = (person *)realloc(usersTmp, (totalUser + 2) * sizeof(person));
+        decryptUserData(&usersTmp[totalUser]);
         ++totalUser;
-    }
-    rewind(userRecord);
-    usersTmp = (person *)malloc(totalUser * sizeof(person));
-    int index = 0;
-    while (fread(&usersTmp[index], sizeof(person), 1, userRecord) == 1)
-    {
-        decryptUserData(&usersTmp[index]);
-        index++;
     }
     fclose(userRecord);
 
