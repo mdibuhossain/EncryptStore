@@ -50,7 +50,7 @@ void subEncrypt(char *st)
 void subDecrypt(char *st)
 {
     unsigned int len = strlen(st);
-    for (int i = 0; i < len; i++)
+    for (unsigned int i = 0; i < len; i++)
     {
         st[i] = st[i] - 1;
     }
