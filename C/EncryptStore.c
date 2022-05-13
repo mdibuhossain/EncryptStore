@@ -573,47 +573,59 @@ int deleteAccount(char *username)
     char ch;
     printf("Are you sure want to delete your account? (y / n): ");
     scanf("%c", &ch);
+    fflush(stdin);
     if (ch == 'Y' || ch == 'y')
     {
-        userDataFile = fopen(intoUserData(username), "rb");
-        char del[5 * MAX_USERNAME_SIZE] = "del ";
-        if (userDataFile != NULL)
+        char confirmUsername[MAX_USERNAME_SIZE] = "";
+        printf("Please type \"%s\" to confirm without quotes: ", username);
+        gets(confirmUsername);
+        if (!strcmp(username, confirmUsername))
         {
-            fclose(userDataFile);
-            strcat(del, intoUserData(username));
-            system(del); // delete user social information
-            statusMessage("Account delete successfully");
+            userDataFile = fopen(intoUserData(username), "rb");
+            char del[5 * MAX_USERNAME_SIZE] = "del ";
+            if (userDataFile != NULL)
+            {
+                fclose(userDataFile);
+                strcat(del, intoUserData(username));
+                system(del); // delete user social information
+                statusMessage("Account delete successfully");
+            }
+            else
+            {
+                fclose(userDataFile);
+                statusMessage("Account already deleted");
+            }
+
+            userRecord = fopen(personPath, "rb");
+            int totalUser = 0;
+            person *usersTmp;
+            usersTmp = (person *)malloc(1 * sizeof(person));
+            while (fread(&usersTmp[totalUser], sizeof(person), 1, userRecord) == 1)
+            {
+                usersTmp = (person *)realloc(usersTmp, (totalUser + 2) * sizeof(person));
+                decryptUserData(&usersTmp[totalUser]);
+                ++totalUser;
+            }
+            fclose(userRecord);
+
+            userRecord = fopen(personPath, "wb");
+            for (int i = 0; i < totalUser; i++)
+            {
+                if (strcmp(username, usersTmp[i].username))
+                {
+                    encryptUserData(&usersTmp[i]);
+                    fwrite(&usersTmp[i], sizeof(person), 1, userRecord);
+                }
+            }
+            free(usersTmp);
+            fclose(userRecord);
+            return 1;
         }
         else
         {
-            fclose(userDataFile);
-            statusMessage("Account already deleted");
+            statusMessage("Cofirmation didn't match");
+            return 0;
         }
-
-        userRecord = fopen(personPath, "rb");
-        int totalUser = 0;
-        person *usersTmp;
-        usersTmp = (person *)malloc(1 * sizeof(person));
-        while (fread(&usersTmp[totalUser], sizeof(person), 1, userRecord) == 1)
-        {
-            usersTmp = (person *)realloc(usersTmp, (totalUser + 2) * sizeof(person));
-            decryptUserData(&usersTmp[totalUser]);
-            ++totalUser;
-        }
-        fclose(userRecord);
-
-        userRecord = fopen(personPath, "wb");
-        for (int i = 0; i < totalUser; i++)
-        {
-            if (strcmp(username, usersTmp[i].username))
-            {
-                encryptUserData(&usersTmp[i]);
-                fwrite(&usersTmp[i], sizeof(person), 1, userRecord);
-            }
-        }
-        free(usersTmp);
-        fclose(userRecord);
-        return 1;
     }
     else
     {
