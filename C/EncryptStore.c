@@ -141,6 +141,7 @@ void statusMessage(char st[])
     gotoxy(33, 19);
     // Sleep(800);
     askToReturnMainMenu();
+    system("cls");
     system("color F0");
 }
 
@@ -665,6 +666,9 @@ void loggedInMenu()
 // User Logged in
 void userLoggedIn(char *username)
 {
+    userDataFile = fopen(intoUserData(username), "wb");
+    close(userDataFile);
+
     int inp;
     int flag = 0;
     while (1)
