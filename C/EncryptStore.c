@@ -350,12 +350,12 @@ int showAllSocialData(char *username)
     socialData tmpAllSocial;
     userDataFile = fopen(intoUserData(username), "rb");
     int count = 0;
-    if (userDataFile == NULL)
-    {
-        fclose(userDataFile);
-        statusMessage("Data not found");
-        return -1;
-    }
+    // if (userDataFile == NULL)
+    // {
+    //     fclose(userDataFile);
+    //     statusMessage("Data not found");
+    //     return -1;
+    // }
     system("cls");
     displayDataTitle();
     while (fread(&tmpAllSocial, sizeof(socialData), 1, userDataFile) == 1)
@@ -666,9 +666,6 @@ void loggedInMenu()
 // User Logged in
 void userLoggedIn(char *username)
 {
-    userDataFile = fopen(intoUserData(username), "wb");
-    close(userDataFile);
-
     int inp;
     int flag = 0;
     while (1)
